@@ -38,11 +38,11 @@ measure with exit codes, not with words found on a screen.
 
 ---
 
-## Other pieces of the package
+## Named in the work this came out of
 
-This piece is one of the set. The others carry their own credits in the full
-package: **Aya ([@ayakohi](https://github.com/ayakohi))** with Cygnus, for
-decision hygiene before building; and **Anne and Chadrien Solance
-([@SolanceLab](https://github.com/SolanceLab))** (the pause before an action
+This tool was written alongside others, and those carry ideas worth naming even
+where none of their code is here: **Aya ([@ayakohi](https://github.com/ayakohi))**
+with Cygnus, for decision hygiene before building; and **Anne and Chadrien Solance
+([@SolanceLab](https://github.com/SolanceLab))**, for the pause before an action
 that cannot be undone, the trail from a line of code back to the decision that
-put it there, and the map over a folder).
+put it there, and the map over a folder.

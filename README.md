@@ -1,12 +1,12 @@
 # A guard you have not seen fail is a guard you cannot trust — make each one prove itself
 
-> **DRAFT.** Piece type: **method + script.** `prove_your_guards.py` (**Dry_I**), in this folder.
+> **Dry_I** — a method, and the script that runs it: `prove_your_guards.py`.
 
 | | |
 |---|---|
 | **What it needs** | Guards written as scripts that can answer a test flag (`--selftest`). Python 3, standard library only. |
 | **Where it runs** | Anywhere Python runs. |
-| **What it does not cover** | Guards that CHANGE things (see Scope). It does not read your logs: for counting what a guard did in the past, see the sibling piece `../06-count-guard-outcomes/`. |
+| **What it does not cover** | Guards that CHANGE things (see Scope). And it does not read logs: it asks your guards to prove themselves NOW, not to account for what they did last month. |
 
 ---
 
@@ -18,8 +18,8 @@ it still works.
 
 ### Step 1 — make each guard able to prove itself, today
 
-A log tells you what your guard did in the past (that is the sibling piece,
-`../06-count-guard-outcomes/`). This step asks it to show, right now, that it still works. **A guard you tested once by hand, the day you wrote it, has no proof left: that test
+A log tells you what your guard did in the past. This asks it to show, right now, that it
+still works. **A guard you tested once by hand, the day you wrote it, has no proof left: that test
 left with the conversation.**
 
 Give each guard a flag that runs the guard itself and checks the result:
