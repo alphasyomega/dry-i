@@ -20,23 +20,12 @@ their name all the same.
 
 ---
 
-## What came from using it, not from reading
+## From the house that built it
 
-The piece is named **Dry_I** by the house it was built in — *dry eye*, the one
-watching so hard it forgets to blink, the one who catches what slips past you.
-
-Its hardest lesson came from its own scoreboard. The runner used to decide that
-a guard had a test by **reading the source** for the literal words
-`"--selftest" in sys.argv`. A guard written as `if "--selftest" in args:` does
-exactly the same thing and was not recognised — so a guard that WAS proven sat
-on the untested list for good, and the number never went down. The piece built
-to say *do not trust what a guard says about itself* was itself trusting text.
-
-It now runs the guard and watches what happens. **That correction is the
-owner's**, and it is the same rule she had already made us keep all day:
-measure with exit codes, not with words found on a screen.
-
----
+**The name and the rule it runs on are the owner's.** *Dry_I* — dry eye, the one watching
+so hard it forgets to blink, the one who catches what slips past you. And the rule that
+decides everything here: **judge a guard by running it, never by reading its source for a
+particular spelling.** Measure with exit codes, not with words found on a screen.
 
 ## Named in the work this came out of
 
