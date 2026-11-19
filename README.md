@@ -16,7 +16,7 @@ it still works.
 
 ## What to do
 
-### Step 1 — make each guard able to prove itself, today
+### Make each guard able to prove itself, today
 
 A log tells you what your guard did in the past. This asks it to show, right now, that it
 still works. **A guard you tested once by hand, the day you wrote it, has no proof left: that test
@@ -84,43 +84,6 @@ repairs things quietly steals the symptom.
 ⭐ **And the list of guards with no test yet is the scoreboard.** It shrinks every time one gets
 its own, and when it is empty the work is done.
 
-### Step 2 — check the fixture, not only the result
-
-A guard's test can pass, or fail, for a reason that has nothing to do with the guard. **In one day,
-building the pieces in this set, Alphas&Omega produced four green results that were all false — and not one
-of them came from bad code.**
-
-| What was being measured | What the fixture actually did |
-|---|---|
-| whether a live script had a fix | Alphas&Omega searched the source for strings instead of running it |
-| whether a sweep read a long line | the probe file had newlines in it, and the cut was per line |
-| whether a commit gate caught a key | the file was passed as an argument, and the gate reads git's index |
-| whether a hook was stopping a push | the fixture ran against a hooks directory the hook was never in |
-
-**All four would have passed any review of the code, because the code was right.** They failed as
-evidence.
-
-⭐ **The rule they left: a method applied with the wrong fixture lies exactly as much as no method
-at all.** So:
-
-- **Run one control beside every real case.** One input the guard *must* catch and one it *must*
-  let through, in the same run. A guard that reports nothing on both is not clean — it is not
-  running.
-- **Make the probe the way the guard is really called.** Read the caller: what does it pass on
-  stdin, in arguments, in the environment? A probe that reaches the guard by a different door is
-  measuring a different guard.
-- **When a result surprises you, suspect the probe before the code.** Three of the four were caught
-  that way, and the fourth was caught by someone else repeating the test with their own fixture.
-- **A piece that says "tested" has to be able to say against what.**
-- **And look at the result without changing it on the way out.** Alphas&Omega reported a defect that did not
-  exist: a tool returned a correct path, their own display printed it through a console that could not
-  encode it, and the mangled characters looked like the tool's fault. *A character read as data and a
-  character printed to a terminal are not the same data.* **A bad fixture does not only hide a
-  defect — it can invent one**, and chasing an invented defect costs the same as missing a real one. If the fixture is not written
-  down, the claim is not checkable — by a reader, or by you next month.
-
-*Found on 17 November 2026, four times, by Alpha 1 and Alpha 2 building the same set of pieces.*
-
 ### Use cases
 
 - **A startup check.** `--brief` at the top of a session: one line that says the guards ran and
@@ -179,22 +142,9 @@ by hash. It is safe **because a person aimed it** — not because it is timid.
 must fail loudly rather than drop cases silently, and a guard is not trusted until it has been seen
 to fail on purpose. https://www.anthropic.com/research/building-strong-safety-evaluations
 
-**This came from the same audit, turned on the house that wrote it.** Alphas&Omega counted their own
-guards and found almost none had a check anyone could run — of the ones that exist to catch
-something, not one. **They were publishing the lesson and not keeping it.** The first guard to get
-its own test was the one whose silence would have cost them the most; the runner and the scoreboard
-came with it.
-
-*The count is deliberately not printed here. A number in a README is true on the day it is written
-and quietly false afterwards — and this tool exists so you can read your own number, today, instead
-of trusting someone else's.*
-
-⚠️ **And the first outside reviewer caught the runner lying about that very number.** Pointed at
-Alphas&Omega's folders it reported a different count, because it was treating any file that
-*mentioned* the flag as tested — including itself. Two fixes came out of it: detection now requires
-the flag to be handled, and `--brief` always prints its line. **A scoreboard that counts wrong is
-worse than no scoreboard, and Alphas&Omega only found out by handing it to someone who had not built
-it.**
+*No count is printed here on purpose. A number in a README is true the day it is written and
+quietly false afterwards — and this tool exists so you can read your own, today, instead of
+trusting someone else's.*
 
 **And it can now prove itself:** `python prove_your_guards.py --selftest` builds throwaway guards
 (one that passes, one that fails, one that says both, one that stays silent, one that crashes,
