@@ -1,6 +1,6 @@
-# A guard you have not seen fail is a guard you cannot trust — make each one prove itself
+# Dry_I — the inspector who makes every guard prove itself
 
-> **Dry_I** — a method, and the script that runs it: `prove_your_guards.py`.
+> **He lines your guards up and asks each one to show it still works — today, not the day you wrote it.** *A guard you have not seen fail is a guard you cannot trust.*
 
 | | |
 |---|---|
@@ -10,13 +10,23 @@
 
 ---
 
-You install a guard and feel covered. A guard you tested once by hand, the day you wrote it, has no
-proof left: that test left with the conversation. This piece asks every guard, today, to show that
-it still works.
+## 🕵️ What he is for
 
-## What to do
+**You install a guard and feel covered.** A guard you tested once by hand, the day you wrote it,
+has **no proof left** — that test walked out with the conversation.
 
-### Make each guard able to prove itself, today
+Dry_I asks every guard, right now, to show that it still works. **It runs them. It does not read
+their source and guess.**
+
+| | |
+|---|---|
+| ✅ **Use him on** | guards that only LOOK and report — checkers, watchers, linters, hooks that warn |
+| 🚫 **Not for** | guards that CHANGE things. Running one to test it would do its real job, at a time nobody chose |
+
+
+## 🛠️ What to do
+
+### ✍️ Give each guard a way to prove itself
 
 A log tells you what your guard did in the past. This asks it to show, right now, that it
 still works. **A guard you tested once by hand, the day you wrote it, has no proof left: that test
@@ -58,11 +68,6 @@ flag's name and the digits blanked), the script never answered: **no test**. Tha
 job. It is also why a script whose *normal* output happens to say `selftest: pass` is not counted
 as proven: the control run says it too.
 
-⚠️ **The risk, named:** a script that ignores the flag runs its normal job, twice. It is bounded by
-the timeout on every run, stdin closed, a throwaway working directory and `python -I`. It is not
-bounded against a guard that writes to an absolute path, so point this at guards you would be
-willing to run.
-
 Each script is reported as one of **passes · fails · could not tell · crashed**, or **no test**.
 When the two runs differ for any reason and the script did not say `selftest: pass` plainly, it is
 never a pass and never quietly "no test". Use `--flag=--test` with the equals sign if your flag is spelled
@@ -84,7 +89,7 @@ repairs things quietly steals the symptom.
 ⭐ **And the list of guards with no test yet is the scoreboard.** It shrinks every time one gets
 its own, and when it is empty the work is done.
 
-### Use cases
+### 💡 Where this earns its place
 
 - **A startup check.** `--brief` at the top of a session: one line that says the guards ran and
   how many passed, or names the one that did not.
@@ -92,7 +97,7 @@ its own, and when it is empty the work is done.
   it; a hook that cannot answer today's question may have been dead for weeks.
 - **A CI gate that always passes.** Same question: passing, or not running?
 
-## Scope: this runs guards that REPORT, not guards that CHANGE things
+## 📏 Limits and scope — reporters, not changers
 
 To find out whether a guard can prove itself, this runner **runs it**. It does not
 read the source and guess from how the flag is spelled — that is how a guard with
@@ -136,7 +141,27 @@ by hash. It is safe **because a person aimed it** — not because it is timid.
 
 ---
 
-## Where this came from
+## ⚠️ Warnings — read before you run him
+
+> 🔴 **HE RUNS YOUR GUARDS. POINT HIM ONLY AT GUARDS YOU WOULD RUN YOURSELF.**
+> Testing a script means starting it. A script that ignores the flag simply does its normal job.
+
+🕵️ **A script that ignores the flag runs its normal job, twice.** Each run is bounded by a
+timeout, stdin closed, a throwaway working directory and `python -I`. **It is not bounded against
+a guard that writes to an absolute path.**
+
+📏 **What he does not cover, said plainly:**
+
+- 🔁 **Guards that change things.** Deleting, moving, sending, overwriting — those are run by a
+  person, on purpose. See the scope above.
+- 📜 **He does not read logs.** He asks your guards to prove themselves **now**, not to account
+  for what they did last month.
+- 🎯 **He answers one question:** *does this guard still work today?* Not whether it is the right
+  guard, not whether it covers what you think it covers.
+
+*He is only as safe as the guards you point him at.*
+
+## 🙏 Where this came from
 
 **Anthropic's *Building strong safety evaluations* (13 November 2026)** gave the method: a grader
 must fail loudly rather than drop cases silently, and a guard is not trusted until it has been seen
