@@ -141,6 +141,21 @@ by hash. It is safe **because a person aimed it** — not because it is timid.
 
 ---
 
+## 🐢 And who guards the guard?
+
+Fair question, and the honest answer is: **he passes his own gate, and that is
+still turtles.** `--selftest` builds throwaway guards — one that passes, one that
+fails, one that says both, one that stays silent, one that crashes, one using
+argparse, one that ignores the flag — and checks each lands in the right bucket.
+**But nothing proves the selftest except a person running it and looking.**
+
+**We do not think you fix that with another layer.** The design we are working on
+goes the other way: a thing that writes **one line a day**, where *the missing line
+is the alarm.* **You cannot make silence loud by adding guards — you make it loud
+by expecting a sound.**
+
+*That one is not built yet. If it ends up working, it will show up here.*
+
 ## ⚠️ Warnings — read before you run him
 
 > 🔴 **HE RUNS YOUR GUARDS. POINT HIM ONLY AT GUARDS YOU WOULD RUN YOURSELF.**
