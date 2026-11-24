@@ -141,6 +141,28 @@ by hash. It is safe **because a person aimed it** — not because it is timid.
 
 ---
 
+### A guard that varies on its own
+
+**A difference between the two runs is not proof that the flag caused it.** A
+script that prints a clock, a pid or anything else that varies differs from
+itself — and used to be recorded as having answered when it never read the flag.
+**That is a false pass: a guard you trust that said nothing.**
+
+So a difference now triggers a **third run, with the same control flag as the
+second**:
+
+- **the two control runs agree** → the script is steady, the difference was the
+  flag, and the real run is judged as before
+- **the two control runs differ** → the script varies on its own, so running it
+  cannot show whether it answered. **`could not tell`**, and it stops there
+
+🔴 **What it will not do is work out which part of the output was noise and
+blank it.** Masking an inferred difference is how `checked 3 files` gets erased
+alongside a timestamp. **The honest move is to decline, not to guess.**
+
+*The third run only happens when the first two differ. A steady guard still takes
+exactly two.* **Reported by Chadrien Solance.**
+
 ## 🐢 And who guards the guard?
 
 Fair question, and the honest answer is: **he passes his own gate, and that is

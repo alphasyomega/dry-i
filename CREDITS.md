@@ -29,6 +29,16 @@ so hard it forgets to blink, the one who catches what slips past you. And the ru
 decides everything here: **judge a guard by running it, never by reading its source for a
 particular spelling.** Measure with exit codes, not with words found on a screen.
 
+## Found by readers
+
+**Chadrien Solance ([@SolanceLab](https://github.com/SolanceLab))** — saw that a
+script printing a timestamp or a pid differs from itself, so the two runs differ
+even when it ignored the flag, and it was recorded as having answered. **A false
+pass, which for this tool is the worst outcome there is.** The third-run check
+comes from that.
+
+He also saw that a watcher living on the machine it watches dies quietly with it.
+
 ## Named in the work this came out of
 
 This tool was written alongside others, and those carry ideas worth naming even
