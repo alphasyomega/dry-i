@@ -140,9 +140,33 @@ def marker_lines(*streams):
 # writes land there), and python -I. Absolute paths a guard writes to are not
 # contained. Run this on guards you would be willing to run.
 #
-# Fail closed: when the two runs differ for any reason, the script is treated as
-# having answered, and unless it said `selftest: pass` plainly it is "could not
-# tell" or "crashed", never a pass and never quietly "no test".
+# When the two runs differ, that USED TO mean the script answered. It does not:
+# a script that prints a clock, a pid or anything else that varies differs from
+# itself, and was recorded as having answered when it never read the flag. That
+# is a false pass -- a guard you trust that said nothing -- and for this tool it
+# is the worst outcome there is. Reported by Chadrien Solance, 23-nov-2026.
+#
+# So a difference is no longer proof. It triggers a THIRD run, with the SAME
+# control flag as the second (not a different one: a script that branches on the
+# argument's length would confound noise with a real answer). Then:
+#
+#   the two control runs AGREE -> the script is steady, the difference was the
+#                                 flag, and the real run is judged as before
+#   the two control runs DIFFER -> the script varies on its own, so this method
+#                                 cannot tell. Say "could not tell" and stop.
+#
+# What it deliberately does NOT do is work out WHICH part of the output was the
+# noise and blank it. Masking an inferred difference is how "checked 3 files" vs
+# "checked 0 files" gets erased alongside a timestamp -- the same reason blanket
+# digit-blanking was rejected. The honest move is to decline, not to guess.
+# Adversarial review by Sol (codex), who killed a worse version of this fix.
+#
+# Cost: the third run only happens when the first two differ. A steady guard
+# still takes exactly two.
+#
+# Fail closed, still: when the script answered, and unless it said
+# `selftest: pass` plainly, it is "could not tell" or "crashed" -- never a pass
+# and never quietly "no test".
 CONTROL = "--prove-your-guards-control"
 NO_TEST = "no test"
 
@@ -199,6 +223,19 @@ def run(path, flag, timeout):
     # Did the script answer the flag? Only an unknown control run can say.
     if _shape(res, flag, scratch, CONTROL) == _shape(ctl, CONTROL, scratch2, flag):
         return NO_TEST, "behaves the same with an unknown flag (exit %d)" % rc
+
+    # They differ -- which is not yet proof that the flag caused it. A script
+    # that prints a clock or a pid differs from itself. Ask the control the same
+    # question twice: if it answers the same way, the script is steady and the
+    # difference WAS the flag.
+    with tempfile.TemporaryDirectory() as scratch3:
+        ctl2 = _once(path, CONTROL, timeout, scratch3)
+    if isinstance(ctl2, str):
+        return "could not tell", ("a second control run (unknown flag) did not give a "
+                                  "clean result: %s" % ctl2)
+    if _shape(ctl, CONTROL, scratch2, flag) != _shape(ctl2, CONTROL, scratch3, flag):
+        return "could not tell", ("output varies between identical runs, so running it "
+                                  "cannot show whether it answered the flag")
 
     lines = out.strip().splitlines()
     last = lines[-1].strip() if lines else ""
